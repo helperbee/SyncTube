@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
+import YouTubeVideo from './YoutubePlayer.jsx';
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -32,6 +33,9 @@ export default function App() {
   }, []);
 
   return (
+    <>
       <h2 style={{textAlign:'center'}}>CONNECTION : {isConnected ? <span style={{color:'green'}}>ACTIVE</span> : <span style={{color:'red'}}>DEAD</span>}</h2>
+      <YouTubeVideo />
+    </>
   );
 }

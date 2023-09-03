@@ -1,1 +1,2 @@
 AWS_SERVER=YOUR AWS EC2 PATH
+PORT=port to host on

@@ -11,7 +11,7 @@ app.use(express.urlencoded({extended: true}));
 
 const http = require('http');
 const server = http.createServer(app);
-const serverPort = 3000;
+const serverPort = process.env.PORT || 3000;
 
 const { Server } = require("socket.io");//https://adamtheautomator.com/https-nodejs/ will need https for deployment.
 const io = new Server(server, {cors: {
