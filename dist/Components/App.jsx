@@ -1,15 +1,17 @@
+// App.jsx
 import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
-import YouTubeVideo from './YoutubePlayer.jsx';
+import YouTubeVideo from './YouTubeVideo.jsx';
+import { player } from '../YouTubePlayer';
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [supportedEvents, setSupportedEvents] = useState([]);
+  const [videoId, setVideoId] = useState('GkAkzlrfRYw');
 
   useEffect(() => {
-
     let onConnect = () => {
-      setIsConnected(true); 
+      setIsConnected(true);
       socket.emit('supported');
     };
 
@@ -17,10 +19,10 @@ export default function App() {
       setIsConnected(false);
     };
 
-    let onInitializer = (i) =>{
-      setSupportedEvents(i);//Initial response of supported items/commands
+    let onInitializer = (i) => {
+      setSupportedEvents(i);
     };
-    
+
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('initializer', onInitializer);
@@ -32,10 +34,50 @@ export default function App() {
     };
   }, []);
 
+  const handlePlayerReady = (event) => {
+    console.log('Player is ready:', player);
+    if (player) {
+      player.addEventListener('onStateChange', (event) => {
+        switch (event.data) {
+          case window.YT.PlayerState.PLAYING:
+            console.log('Video is playing.');
+            break;
+          case window.YT.PlayerState.PAUSED:
+            console.log(`Video was paused at ${player.getCurrentTime()} seconds`);
+            break;
+          case window.YT.PlayerState.ENDED:
+            console.log('Video has ended.');
+            break;
+          case window.YT.PlayerState.BUFFERING:
+            console.log('Video is buffering.');
+            break;
+          default:
+            console.log(`Unknown event is happening. ${event.data}`);
+            break;
+        }
+      });
+    }
+    player.loadVideoById(videoId);
+  };
+
+  const handleVideoIdChange = (event) => {
+    const newVideoId = event.target.value;
+    setVideoId(newVideoId);
+    player.loadVideoById(newVideoId);
+  };
+
   return (
     <>
-      <h2 style={{textAlign:'center'}}>CONNECTION : {isConnected ? <span style={{color:'green'}}>ACTIVE</span> : <span style={{color:'red'}}>DEAD</span>}</h2>
-      <YouTubeVideo />
+      <h2 style={{ textAlign: 'center' }}>
+        CONNECTION : {isConnected ? <span style={{ color: 'green' }}>ACTIVE</span> : <span style={{ color: 'red' }}>DEAD</span>}
+      </h2>
+      <YouTubeVideo videoId={videoId} onPlayerReady={handlePlayerReady} />
+      <input
+        type="text"
+        placeholder="Enter Video ID"
+        value={videoId}
+        onChange={handleVideoIdChange}
+      />
     </>
   );
 }
