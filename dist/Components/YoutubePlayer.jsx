@@ -1,75 +1,68 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 
-let YouTubeVideo  = () => {
-    const [player, setPlayer] = useState(null);
-    const [videoId, setVideoId] = useState('GkAkzlrfRYw');
-
+let YouTubePlayer = () => {
+    let player = null;
+  
     useEffect(() => {
-        const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        window.onYouTubeIframeAPIReady = initYouTubePlayer;
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  
+      window.onYouTubeIframeAPIReady = initYouTubePlayer;
     }, []);
-
-    const onPlayerStateChange = (event) => {
-        //-1 unstarted, 0 - ended, 1 - playing, 2 - paused, 3 - buffering
-        switch(event.data){
-            case -1:
-                console.log('Video hasnt been started.');
-                break;
-            case 0:
-                console.log('Video has ended.');
-                break;
-            case 1:
-                console.log('Video is playing.');
-                break;
-            case 2:
-                console.log('Video is paused.');
-                break;
-            case 3:
-                console.log('Video is buffering.');
-                break;
-            default:
-                console.log(`Unknown event is happening. ${event.data}`);
-                break;
-        }
-    };
-
+  
     const initYouTubePlayer = () => {
-        const newPlayer = new window.YT.Player('youtube-player', {
-        videoId: videoId,
+      player = new window.YT.Player('youtube-player', {
+        videoId: 'GkAkzlrfRYw',
         playerVars: {
-            autoplay: 0,
-            controls: 1,
+          autoplay: 0,
+          controls: 1,
         },
         events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange,
         },
-        });
-
-        setPlayer(newPlayer);
+      });
     };
-
+  
     const onPlayerReady = (event) => {
-        console.log('Player is ready');
+      console.log('Player is ready');
     };
-
+  
+    const onPlayerStateChange = (event) => {
+      switch (event.data) {
+        case window.YT.PlayerState.PLAYING:
+          console.log('Video is playing.');
+          break;
+        case window.YT.PlayerState.PAUSED:
+          console.log(`Video was paused at ${player.getCurrentTime()} seconds`);
+          break;
+        case window.YT.PlayerState.ENDED:
+          console.log('Video has ended.');
+          break;
+        case window.YT.PlayerState.BUFFERING:
+          console.log('Video is buffering.');
+          break;
+        default:
+          console.log(`Unknown event is happening. ${event.data}`);
+          break;
+      }
+    };
+  
     const customPlay = () => {
-        if (player) {
+      if (player) {
         player.playVideo();
-        }
+      }
     };
-
+  
     return (
-        <div>
+      <div>
         <div id="youtube-player"></div>
         <button onClick={customPlay}>Play Video</button>
-        </div>
+      </div>
     );
-}
-
-export default YouTubeVideo;
+  }
+  
+  export default YouTubePlayer;
