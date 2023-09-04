@@ -12,7 +12,6 @@ export default function App() {
   useEffect(() => {
     let onConnect = () => {
       setIsConnected(true);
-      socket.emit('supported');
     };
 
     let onDisconnect = () => {
@@ -23,12 +22,30 @@ export default function App() {
       setSupportedEvents(i);
     };
 
+    let onVideo = (info) => {
+      switch(info['command']){
+        case 'play':
+          if(player){
+            player.playVideo();
+          }
+          break;
+        case 'pause':
+          if(player){
+            player.pauseVideo();
+          }
+          break;       
+
+      }
+    };
+
     socket.on('connect', onConnect);
+    socket.on('video', onVideo);
     socket.on('disconnect', onDisconnect);
     socket.on('initializer', onInitializer);
 
     return () => {
-      socket.off('connect', onConnect);
+      socket.off('connect', onConnect);      
+      socket.on('video', onVideo);
       socket.off('disconnect', onDisconnect);
       socket.off('initializer', onInitializer);
     };
@@ -64,6 +81,7 @@ export default function App() {
     const newVideoId = event.target.value;
     setVideoId(newVideoId);
     player.loadVideoById(newVideoId);
+    player.pauseVideo();
   };
 
   return (

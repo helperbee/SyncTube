@@ -28,6 +28,9 @@ server.listen(serverPort, () => {
 
 io.on('connection', (socket) => {
     console.log("User connected from frontend.");
+    socket.on('video', (info) => {
+      socket.broadcast.emit('video', info);
+    });
     socket.on('ping', (arg) => {
       socket.emit('pong', "hey");
     });    
