@@ -47,6 +47,9 @@ io.on('connection', (socket) => {
       socket.broadcast.emit('update', {type:'pin', messageId:pinInfo.messageId, pinned:pinned})
 
     });
+    socket.on('comments_all', () => {//this is probably bad
+      socket.emit('comments_all', messages);
+    });
     socket.on('ping', (arg) => {
       socket.emit('pong', "hey");
     });    

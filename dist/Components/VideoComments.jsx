@@ -11,6 +11,10 @@ let VideoComments = () => {
     const [comments, setComments] = React.useState([]);
     const [videoComment, setVideoComment] = React.useState('');
 
+    React.useEffect(() => {
+        socket.emit('comments_all');
+    }, []);
+
     const handleCommentChange = (event) => {
         const newComment = event.target.value;
         setVideoComment(newComment);
@@ -41,11 +45,19 @@ let VideoComments = () => {
             });
         });
     };
+
+
+    const onCommentsAll = (commentList) => {
+        console.log(commentList);
+        setComments(commentList);
+    };
     React.useEffect(() => {
         socket.on('comment', onComment);
+        socket.on('comments_all', onCommentsAll);
         socket.on('update', onUpdate); 
         return () => {
-            socket.off('comment', onComment);
+            socket.off('comment', onComment);            
+            socket.off('comments_all', onCommentsAll);
             socket.off('update', onUpdate);
         }
     }, []);
