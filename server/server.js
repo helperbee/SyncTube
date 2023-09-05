@@ -25,7 +25,7 @@ server.listen(serverPort, () => {
   console.log(`Server hosted on port:${serverPort}`);
 });
 
-
+let messages = [];
 io.on('connection', (socket) => {
     
     console.log("User connected from frontend.");
@@ -34,6 +34,9 @@ io.on('connection', (socket) => {
       socket.broadcast.emit('video', { ...info, senderSocketId: socket.id });
     });
     socket.on('comment', (comment) => {
+      let newestMessage = {...comment, sender:socket.id}; 
+      messages.push(newestMessage);
+      socket.broadcast.emit('comment', newestMessage);
       console.log('Comment Event : ', comment);
     });
     socket.on('ping', (arg) => {

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 import YouTubeVideo from './YouTubeVideo.jsx';
+import VideoComments from './VideoComments.jsx';
 import { player, setSync } from '../YouTubePlayer';
 import { Layout, Input, Button } from 'antd';
 
@@ -90,6 +91,7 @@ export default function App() {
           <Button type="primary" onClick={handleAddComment}>
             Add Comment
           </Button>
+          <VideoComments />
         </div>
       </Layout.Content>
     </Layout>
