@@ -3,10 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../socket';
 import YouTubeVideo from './YouTubeVideo.jsx';
 import { player, setSync } from '../YouTubePlayer';
+import { Layout, Input, Button } from 'antd';
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [videoId, setVideoId] = useState('GkAkzlrfRYw');
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
     let onConnect = () => {
@@ -50,19 +52,42 @@ export default function App() {
     player.loadVideoById(newVideoId);
     player.pauseVideo();
   };
+  const handleCommentChange = (event) => {
+    const newComment = event.target.value;
+    setComment(newComment);
+  };
+
+  const handleAddComment = () => {
+    console.log('Adding comment:', comment);
+    setComment('');
+  };
 
   return (
-    <>
-      <h2 style={{ textAlign: 'center' }}>
-        CONNECTION : {isConnected ? <span style={{ color: 'green' }}>ACTIVE</span> : <span style={{ color: 'red' }}>DEAD</span>}
-      </h2>
-      <YouTubeVideo videoId={videoId} />
-      <input
-        type="text"
-        placeholder="Enter Video ID"
-        value={videoId}
-        onChange={handleVideoIdChange}
-      />
-    </>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Layout.Content style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div>
+          <h2 style={{ textAlign: 'center' }}>
+            CONNECTION : {isConnected ? <span style={{ color: 'green' }}>ACTIVE</span> : <span style={{ color: 'red' }}>DEAD</span>}
+          </h2>
+          <input
+            type="text"
+            placeholder="Enter Video ID"
+            value={videoId}
+            onChange={handleVideoIdChange}
+          />
+          <YouTubeVideo videoId={videoId} />
+          <Input.TextArea
+            placeholder="Add a comment"
+            showCount 
+            maxLength={100}
+            value={comment}
+            onChange={handleCommentChange}
+          />
+          <Button type="primary" onClick={handleAddComment}>
+            Add Comment
+          </Button>
+        </div>
+      </Layout.Content>
+    </Layout>
   );
 }
