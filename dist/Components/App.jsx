@@ -18,19 +18,18 @@ export default function App() {
     };
 
     let onVideo = (info) => {
-      console.log(info);
-      console.log(player);
       setSync(true);
       if (player) {
         player.seekTo(info.timestamp);
         if (info.command === 'play' && (player.playerInfo.playerState === 2)) {
           console.log('ATTEMPTING TO PRESS PLAY');
+          player.setVolume(50);
           player.playVideo();
         } else if (info.command === 'pause' && ((player.getPlayerState() === window.YT.PlayerState.PLAYING) || (player.getPlayerState() === window.YT.PlayerState.BUFFERING))) {
           player.pauseVideo();
         }
       }
-      setSync(false);
+
     };
 
     socket.on('connect', onConnect);
