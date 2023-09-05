@@ -30,8 +30,11 @@ io.on('connection', (socket) => {
     
     console.log("User connected from frontend.");
     socket.on('video', (info) => {
-      console.log(info);
+      console.log('Video Event : ', info);
       socket.broadcast.emit('video', { ...info, senderSocketId: socket.id });
+    });
+    socket.on('comment', (comment) => {
+      console.log('Comment Event : ', comment);
     });
     socket.on('ping', (arg) => {
       socket.emit('pong', "hey");

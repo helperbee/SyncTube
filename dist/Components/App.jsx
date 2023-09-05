@@ -58,7 +58,11 @@ export default function App() {
   };
 
   const handleAddComment = () => {
-    console.log('Adding comment:', comment);
+    let sendComment = {
+      text: comment,
+      time: (player) ? player.getCurrentTime() : 0//I could do this on the server-side
+    }
+    socket.emit('comment', sendComment);//send to server
     setComment('');
   };
 
