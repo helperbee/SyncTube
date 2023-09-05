@@ -12,10 +12,30 @@ let VideoComments = () => {
     const onComment = (comment) => {
         setComments((prevComments) => [...prevComments, comment]);
     };
+    const onUpdate = (update) => {
+        const updateType = update.type;
+    
+        setComments((prevComments) => {
+            const updatedComments = [...prevComments];
+            console.log(update);//test
+            console.log(updatedComments);
+    
+            switch (updateType) {
+                case 'pin':
+                    updatedComments[update.messageId - 1].pinned = update.pinned;
+                    return updatedComments;
+                default:
+                    console.log('Confusion');
+                    return prevComments;
+            }
+        });
+    };
     React.useEffect(() => {
-        socket.on('comment', onComment); //this is bad
+        socket.on('comment', onComment);
+        socket.on('update', onUpdate); 
         return () => {
             socket.off('comment', onComment);
+            socket.off('update', onUpdate);
         }
     }, []);
 
@@ -25,7 +45,7 @@ let VideoComments = () => {
             {
                 comments.length > 0 &&
                 comments.map((e) => {
-                    return <Comment comment={e}/>;
+                    return <Comment key={e.id} comment={e}/>;
                 })
             }
         </>

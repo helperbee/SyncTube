@@ -34,10 +34,18 @@ io.on('connection', (socket) => {
       socket.broadcast.emit('video', { ...info, senderSocketId: socket.id });
     });
     socket.on('comment', (comment) => {
-      let newestMessage = {...comment, sender:socket.id}; 
+      let newestMessage = {...comment, pinned:false, sender:socket.id, id:messages.length+1}; 
       messages.push(newestMessage);
       socket.broadcast.emit('comment', newestMessage);
       console.log('Comment Event : ', comment);
+    });
+    socket.on('pin', (pinInfo) => {
+      console.log(messages);
+      console.log(pinInfo);
+      const pinned = (pinInfo.pinned ? true : false);
+      messages[pinInfo.messageId-1].pinned = pinned; 
+      socket.broadcast.emit('update', {type:'pin', messageId:pinInfo.messageId, pinned:pinned})
+
     });
     socket.on('ping', (arg) => {
       socket.emit('pong', "hey");
