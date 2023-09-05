@@ -37,6 +37,7 @@ io.on('connection', (socket) => {
       let newestMessage = {...comment, pinned:false, sender:socket.id, id:messages.length+1}; 
       messages.push(newestMessage);
       socket.broadcast.emit('comment', newestMessage);
+      socket.emit('comment', newestMessage);//hmm
       console.log('Comment Event : ', comment);
     });
     socket.on('pin', (pinInfo) => {

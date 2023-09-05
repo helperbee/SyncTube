@@ -4,13 +4,11 @@ import { socket } from '../socket';
 import YouTubeVideo from './YouTubeVideo.jsx';
 import VideoComments from './VideoComments.jsx';
 import { player, setSync } from '../YouTubePlayer';
-import { Layout, Input, Button } from 'antd';
+import { Layout } from 'antd';
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [videoId, setVideoId] = useState('GkAkzlrfRYw');
-  const [comment, setComment] = useState('');
-
   useEffect(() => {
     let onConnect = () => {
       setIsConnected(true);
@@ -53,19 +51,7 @@ export default function App() {
     player.loadVideoById(newVideoId);
     player.pauseVideo();
   };
-  const handleCommentChange = (event) => {
-    const newComment = event.target.value;
-    setComment(newComment);
-  };
 
-  const handleAddComment = () => {
-    let sendComment = {
-      text: comment,
-      time: (player) ? player.getCurrentTime() : 0//I could do this on the server-side
-    }
-    socket.emit('comment', sendComment);//send to server
-    setComment('');
-  };
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -81,17 +67,7 @@ export default function App() {
             onChange={handleVideoIdChange}
           />
           <YouTubeVideo videoId={videoId} />
-          <Input.TextArea
-            placeholder="Add a comment"
-            showCount 
-            maxLength={100}
-            value={comment}
-            onChange={handleCommentChange}
-          />
-          <Button type="primary" onClick={handleAddComment}>
-            Add Comment
-          </Button>
-          <VideoComments />
+          <VideoComments/>
         </div>
       </Layout.Content>
     </Layout>
