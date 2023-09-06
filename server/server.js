@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
       socket.broadcast.emit('video', { ...info, senderSocketId: socket.id });
     });
     socket.on('comment', (comment) => {
-      let newestMessage = {...comment, pinned:false, sender:socket.id, id:messages.length+1}; 
+      let newestMessage = {...comment, pinned:false, sender:socket.id, id:messages.length+1, at:Date.now()}; 
       messages.push(newestMessage);
       io.emit('comment', newestMessage);//change this
       console.log('Comment Event : ', comment);

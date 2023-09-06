@@ -66,6 +66,7 @@ let VideoComments = () => {
         <>
             <Input.TextArea
             placeholder="Add a comment"
+            autoSize={{ minRows: 1, maxRows: 5 }}
             showCount 
             maxLength={100}
             value={videoComment}

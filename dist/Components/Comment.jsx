@@ -40,6 +40,19 @@ let Comment = ({comment, pinned, update}) => {
         socket.emit('pin', { messageId: comment.id, pinned: newPinnedState });//send to server
     };
 
+    let getTimeString = (commentDate) => {
+        const currentDate = new Date(commentDate);
+        const hours = currentDate.getHours();
+        const minutes = currentDate.getMinutes();
+        const seconds = currentDate.getSeconds();
+        const ampm = hours >= 12 ? 'PM' : 'AM';      
+        const formattedHours = hours % 12 || 12;      
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;      
+        const timeString = `[${formattedHours}:${formattedMinutes}:${formattedSeconds}${ampm}]`;      
+        return timeString;
+      }
+
     return (
         <Paragraph style={{ textAlign: 'left' }}
         key={comment.pinned ? 'pinned' : 'unpinned'}
@@ -55,6 +68,7 @@ let Comment = ({comment, pinned, update}) => {
                     <PushpinOutlined onClick={handlePin} style={{ cursor: 'pointer' }} />
                 )
             )}
+            {getTimeString(comment.at)}
             {comment.text}
         </Paragraph>
     );
