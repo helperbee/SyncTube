@@ -39,6 +39,13 @@ io.on('connection', (socket) => {
       io.emit('comment', newestMessage);//change this
       console.log('Comment Event : ', comment);
     });
+    // socket.on('disconnect', () => {
+    //   const disconnectedUser = users[socket.id];
+    //   if (disconnectedUser) {
+    //     socket.broadcast.emit('userDisconnected', { username: disconnectedUser.username });
+    //     delete users[socket.id];
+    //   }
+    // });
     socket.on('pin', (pinInfo) => {
       console.log(messages);
       console.log(pinInfo);
