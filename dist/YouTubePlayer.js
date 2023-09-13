@@ -11,7 +11,7 @@ export const initYouTubePlayer = (videoId, onPlayerReady) => {
     player = new window.YT.Player('youtube-player', {
       videoId: videoId,
       playerVars: {
-        autoplay: 0, 
+        autoplay: 1, 
         mute: 1,    //this seems to be required to have true sync BEFORE the user does a manual input on the player.. how can we get around this?
         controls: 1,
       },
@@ -26,7 +26,6 @@ export function getSync() {
   return syncing;
 }
 
-// Export a setter function
 export function setSync(newValue) {
   syncing = newValue;
 }
