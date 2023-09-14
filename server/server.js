@@ -54,6 +54,9 @@ io.on('connection', (socket) => {
       socket.broadcast.emit('update', {type:'pin', messageId:pinInfo.messageId, pinned:pinned})
 
     });
+    socket.on('pin2', (pinInfo) => {
+      console.log(pinInfo);
+    });
     socket.on('comments_all', () => {//this is probably bad
       socket.emit('comments_all', messages);
     });
