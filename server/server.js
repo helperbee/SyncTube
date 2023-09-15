@@ -55,6 +55,7 @@ io.on('connection', (socket) => {
 
     });
     socket.on('pin2', (pinInfo) => {
+      /*  web serial/web usb usage*/
       console.log(pinInfo);
     });
     socket.on('comments_all', () => {//this is probably bad
