@@ -19,7 +19,7 @@ const io = new Server(server, {cors: {
   methods: ["GET", "POST"]
 }});
 
-
+const tester = [];
 
 server.listen(serverPort, () => {
   console.log(`Server hosted on port:${serverPort}`);
@@ -62,7 +62,7 @@ io.on('connection', (socket) => {
       socket.emit('comments_all', messages);
     });
     socket.on('ping', (arg) => {
-      socket.emit('pong', "hey");
+      socket.emit('pong', tester);
     });    
  
 });
