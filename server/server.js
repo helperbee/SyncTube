@@ -24,7 +24,7 @@ const tester = [];
 server.listen(serverPort, () => {
   console.log(`Server hosted on port:${serverPort}`);
 });
-
+//{room:{members:[], messages:[{}]}}
 let messages = [];
 io.on('connection', (socket) => {
     
