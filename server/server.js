@@ -25,6 +25,7 @@ server.listen(serverPort, () => {
   console.log(`Server hosted on port:${serverPort}`);
 });
 //{room:{members:[], messages:[{}]}}
+//message structure
 let messages = [];
 io.on('connection', (socket) => {
     
